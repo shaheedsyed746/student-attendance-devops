@@ -27,7 +27,7 @@ pipeline {
 
         stage('Build Docker image') {
             steps {
-                bat 'docker build -t student-attendance:1.0 .'
+                bat '"C:\\Users\\shahe\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t student-attendance:1.0 .'
             }
         }
     }

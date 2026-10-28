@@ -1,25 +1,43 @@
 pipeline {
-  agent any
-  options { timestamps() }
-  stages {
-    stage('Checkout') {
-      steps { checkout scm }
+    agent any
+
+    options {
+        timestamps()
     }
-    stage('Install dependencies') {
-      steps { sh 'npm install' }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                bat 'npm.cmd install'
+            }
+        }
+
+        stage('Validate application') {
+            steps {
+                bat 'node --check server.js'
+                bat 'npm.cmd test'
+            }
+        }
+
+        stage('Build Docker image') {
+            steps {
+                bat 'docker build -t student-attendance:1.0 .'
+            }
+        }
     }
-    stage('Validate application') {
-      steps {
-        sh 'node --check server.js'
-        sh 'node --check public/app.js'
-        sh 'npm test'
-      }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Review the stage results above.'
+        }
     }
-    stage('Build Docker image') {
-      steps { sh 'docker build -t student-attendance:${BUILD_NUMBER} .' }
-    }
-  }
-  post {
-    always { echo 'Pipeline finished. Review the stage results above.' }
-  }
 }

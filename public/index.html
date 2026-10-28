@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Attendance Management System</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div><p class="eyebrow">CSE · AI &amp; ML</p><h1>Student Attendance</h1><p class="subhead">Daily records · Seven periods · Monthly reports</p></div>
+    <span class="status"><i></i> System ready</span>
+  </header>
+  <main>
+    <section class="stats">
+      <article><span>Registered students</span><strong id="studentCount">0</strong></article>
+      <article><span>Present marks today</span><strong id="presentCount">0</strong></article>
+      <article><span>Absent marks today</span><strong id="absentCount">0</strong></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">01 / ROSTER</p><h2>Student management</h2></div></div>
+      <form id="studentForm" class="student-form">
+        <input id="rollNo" placeholder="Roll number (e.g. 23911A66C4)" required>
+        <input id="studentName" placeholder="Student name" required>
+        <input id="department" placeholder="Department" value="CSE (AI & ML)">
+        <button type="submit" id="studentSubmit">Add student</button>
+      </form>
+      <p id="studentMessage" class="message" role="status"></p>
+      <div class="table-wrap"><table><thead><tr><th>Roll no.</th><th>Student name</th><th>Department</th><th>Action</th></tr></thead><tbody id="studentsBody"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">02 / DAILY ENTRY</p><h2>Mark attendance</h2><p class="muted">Choose P for Present, A for Absent, or leave a period unmarked.</p></div>
+        <label class="date-label">Attendance date <input type="date" id="attendanceDate"></label>
+      </div>
+      <div class="toolbar"><div class="legend"><span class="present-pill">P · Present</span><span class="absent-pill">A · Absent</span></div><div class="actions"><button class="secondary" id="allPresent">Mark all present</button><button class="secondary" id="allAbsent">Mark all absent</button><button id="saveAttendance">Save attendance</button></div></div>
+      <p id="attendanceMessage" class="message" role="status"></p>
+      <div class="table-wrap"><table class="attendance-table"><thead id="attendanceHead"></thead><tbody id="attendanceBody"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">03 / MONTHLY SUMMARY</p><h2>Attendance report</h2><p class="muted">Percentage = present periods ÷ recorded working periods × 100.</p></div>
+        <label class="date-label">Report month <input type="month" id="reportMonth"></label>
+      </div>
+      <div class="toolbar"><span class="muted">Low attendance threshold: below 75%</span><button id="exportCsv" class="secondary">Export CSV</button></div>
+      <p id="reportMessage" class="message" role="status"></p>
+      <div class="table-wrap"><table><thead><tr><th>Roll no.</th><th>Student</th><th>Working periods</th><th>Present</th><th>Absent</th><th>Attendance</th><th>Status</th></tr></thead><tbody id="reportBody"></tbody></table></div>
+    </section>
+    <footer>Student Attendance Management System · DevOps project</footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

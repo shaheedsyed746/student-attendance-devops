@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-attendance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: student-attendance
+  template:
+    metadata:
+      labels:
+        app: student-attendance
+    spec:
+      containers:
+        - name: web
+          image: student-attendance:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: DATA_DIR
+              value: /data
+          volumeMounts:
+            - name: attendance-data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+      volumes:
+        - name: attendance-data
+          persistentVolumeClaim:
+            claimName: attendance-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: attendance-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-attendance
+spec:
+  type: NodePort
+  selector:
+    app: student-attendance
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30080
